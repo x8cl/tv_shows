@@ -1,5 +1,7 @@
-from django.shortcuts import redirect, render, HttpResponse
+from django.shortcuts import redirect, render, HttpResponse, get_object_or_404
 from .models import *
+from django.contrib import messages
+
 # Create your views here.
 def root(request):
     return redirect("/shows")
@@ -20,13 +22,25 @@ def create_show(request):
     if request.method == "GET":
         return redirect("/shows/new")
     elif request.method == "POST":
-        title = request.POST["title"]
-        description = request.POST["description"]
-        network = request.POST["network"]
-        release_date = request.POST["release_date"]
-        obj = Show.objects.create(title=title, networks_id=network, release_date=release_date, description=description)
-        obj.save()
-        return redirect(f"/shows/{obj.id}")
+        # pasar los datos al método que escribimos y guardar la respuesta en una variable llamada errores
+        errors = Show.objects.basic_validator(request.POST)
+        # compruebe si el diccionario de errores tiene algo en él
+        if len(errors) > 0:
+            # si el diccionario de errores contiene algo, recorra cada par clave-valor y cree un mensaje flash
+            for key, value in errors.items():
+                messages.error(request, value)
+            # redirigir al usuario al formulario para corregir los errores
+            print(request.POST["release_date"])
+            return redirect("/shows/new")
+        else:
+            title = request.POST["title"]
+            description = request.POST["description"]
+            network = request.POST["network"]
+            release_date = request.POST["release_date"]
+            obj = Show.objects.create(title=title, networks_id=network, release_date=release_date, description=description)
+            obj.save()
+            messages.success(request, "Show created successfully!!!")
+            return redirect(f"/shows/{obj.id}")
 
 def edit_show(request, show_id):
     context = {
@@ -39,20 +53,26 @@ def update_show(request, show_id):
     if request.method == "GET":
         return redirect("/shows")
     elif request.method == "POST":
-        new_title = request.POST["title"]
-        new_description = request.POST["description"]
-        new_network = request.POST["network"]
-        new_release_date = request.POST["release_date"]
-
         show = Show.objects.get(id=show_id)
+        errors = Show.objects.basic_validator(request.POST)
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect(f"/shows/{show.id}")
+        else:
+            new_title = request.POST["title"]
+            new_description = request.POST["description"]
+            new_network = request.POST["network"]
+            new_release_date = request.POST["release_date"]
 
-        show.title = new_title
-        show.description = new_description
-        show.network = new_network
-        show.release_date = new_release_date
-        show.save()
+            show.title = new_title
+            show.description = new_description
+            show.network = new_network
+            show.release_date = new_release_date
+            show.save()
+            messages.success(request, "Show updated successfully!!!")
 
-        return redirect(f"/shows/{show.id}")
+            return redirect(f"/shows/{show.id}")
 
 
 def delete_show(request, show_id):
@@ -61,7 +81,8 @@ def delete_show(request, show_id):
 
 def show(request, show_id):
     context = {
-        "show" : Show.objects.get(id=show_id)
+        #"show" : Show.objects.get(id=show_id)
+        "show" : get_object_or_404(Show, id=show_id)
     }
     return render(request, "tv_shows/show.html", context)
 
@@ -90,6 +111,6 @@ def delete_network(request, network_id):
 
 def network(request, network_id):
     context = {
-        "network" : Network.objects.get(id=network_id)
+        "network" : get_object_or_404(Network, id=network_id)
     }
     return render(request, "tv_shows/network.html", context)

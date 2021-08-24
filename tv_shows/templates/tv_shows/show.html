@@ -5,6 +5,13 @@
 {% block subheader %}Title: {{ show.title }}{% endblock %}
 {% block content %}
 <div class="row">
+    {% if messages %}
+    <ul class="text-success list-unstyled">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div class="col-9">
         <h4><span class="fw-bold">Title: </span>{{ show.title }}</h4>
         <p><span class="fw-bold">Description: </span>{{ show.description }}</p>
