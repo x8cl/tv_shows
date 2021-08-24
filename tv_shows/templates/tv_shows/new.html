@@ -1,0 +1,43 @@
+{% extends "tv_shows/base.html" %}
+{% block title %}Create{% endblock %}
+{% block header %}New Tv Show{% endblock %}
+{% block subheader %}{% endblock %}
+{% block content %}
+<div class="col-5">
+    <form action="{% url 'tv_shows:create_show' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="mb-3">
+                <label for="title" class="form-label fw-bold">Title:</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Title">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="network" class="form-label fw-bold">Network:</label>
+                <select class="form-select" name="network" id="network">
+                    <option selected>Select Network</option>
+                    {% for i in network %}
+                    <option value="{{ i.id }}">{{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <label for="release_date" class="form-label fw-bold">Release date:</label>
+                <input type="date" class="form-control" name="release_date" id="release_date" placeholder="release_date">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label for="description" class="form-label fw-bold">Description:</label>
+                <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-secondary btn-sm">Add</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

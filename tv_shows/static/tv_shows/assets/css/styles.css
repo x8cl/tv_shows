@@ -1,0 +1,10 @@
+/* img{
+    margin: 5px;
+    border: 1px solid black;
+} */
+.show_img{
+    width: 250px;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: rgb(206, 206, 173);
+}

@@ -1,0 +1,42 @@
+{% extends "tv_shows/base.html" %}
+{% block title %}Edit Tv Show {{ show.id }}{% endblock %}
+{% block header %}Edit Tv Show {{ show.id }}{% endblock %}
+{% block subheader %}{% endblock %}
+{% block content %}
+<div class="col-6">
+    <form action="{% url 'tv_shows:update_show' show.id %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="mb-3">
+                <label for="title" class="form-label fw-bold">Title:</label>
+                <input type="text" class="form-control" name="title" id="title" value="{{ show.title }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="network" class="form-label fw-bold">Network:</label>
+                <select class="form-select" name="network" id="network" value="{{ show.networks }}">
+                    <option value="{{ show.networks.id }}" selected="selected">{{ show.networks }}</option>
+                    {% for i in network %}
+                    <option value="{{ i.id }}">{{ i.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <label for="release_date" class="form-label fw-bold">Release date:</label>
+                <input type="date" class="form-control" name="release_date" id="release_date" value="{{ show.release_date|date:'Y-m-d' }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label for="description" class="form-label fw-bold">Description:</label>
+                <textarea class="form-control" name="description" id="description" rows="3">{{ show.description }}</textarea>
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-danger btn-sm">Save</button>
+            <a class="btn btn-success btn-sm" href="{% url 'tv_shows:show' show.id %}" role="button">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
