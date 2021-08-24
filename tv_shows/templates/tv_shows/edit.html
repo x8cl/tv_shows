@@ -20,11 +20,11 @@
         </div>
         <div class="row mb-3">
             <div class="col">
-                <label for="network" class="form-label fw-bold">Network:</label>
-                <select class="form-select" name="network" id="network" value="{{ show.networks }}">
-                    <option value="{{ show.networks.id }}" selected="selected">{{ show.networks }}</option>
-                    {% for i in network %}
-                    <option value="{{ i.id }}">{{ i.name }}</option>
+                <label for="networks" class="form-label fw-bold">Network:</label>
+                <select class="form-select" name="networks" id="networks">
+                    <option value="{{ show.networks.id }}" selected="selected">{{ show.networks.name }}</option>
+                    {% for network in networks %}
+                    <option value="{{ network.id }}">{{ network.name }}</option>
                     {% endfor %}
                 </select>
             </div>

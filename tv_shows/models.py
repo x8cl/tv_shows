@@ -10,9 +10,9 @@ class ShowManager(models.Manager):
         #valido que el campo "title" tenga al menos 2 caracteres y saco los espacios con strip
         if len(postData["title"].strip()) < 2:
             errors["title"] = "Title must be at least 2 characters"
-        #valido que el campo "network" exista
-        if not postData["network"].isdigit():
-            errors["network"] = "Please select network"
+        #valido que el campo "networks" exista
+        if not postData["networks"].isdigit():
+            errors["networks"] = "Please select a network"
         #valido que el campo "release_date" exista
         if len(postData["release_date"]) < 1:
             errors["release_date"] = "Please enter release date"
@@ -32,13 +32,13 @@ class Network(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("id",)
     
     def __str__(self):
         return self.name
     
 class Show(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     description = models.TextField(max_length=500, blank=True)
     release_date = models.DateField()
     networks = models.ForeignKey(Network, related_name="shows", on_delete=models.CASCADE)
@@ -47,7 +47,7 @@ class Show(models.Model):
     objects = ShowManager()
 
     class Meta:
-        ordering = ("title",)
+        ordering = ("id",)
 
     def __str__(self):
         return self.title

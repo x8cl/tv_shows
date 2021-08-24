@@ -14,7 +14,7 @@ def home(request):
 
 def new_show(request):
     context = {
-        "network" : Network.objects.all()
+        "networks" : Network.objects.all()
     }
     return render(request, "tv_shows/new.html", context)
 
@@ -37,9 +37,9 @@ def create_show(request):
         else:
             title = request.POST["title"]
             description = request.POST["description"]
-            network = request.POST["network"]
+            networks = request.POST["networks"]
             release_date = request.POST["release_date"]
-            obj = Show.objects.create(title=title, networks_id=network, release_date=release_date, description=description)
+            obj = Show.objects.create(title=title, networks_id=networks, release_date=release_date, description=description)
             obj.save()
             messages.success(request, "Show created successfully!!!")
             return redirect(f"/shows/{obj.id}")
@@ -47,7 +47,7 @@ def create_show(request):
 def edit_show(request, show_id):
     context = {
         "show" : Show.objects.get(id=show_id),
-        "network" : Network.objects.all().exclude(shows__id=show_id)
+        "networks" : Network.objects.all().exclude(shows__id=show_id)
     }
     return render(request, "tv_shows/edit.html", context)
 
@@ -62,16 +62,16 @@ def update_show(request, show_id):
                 messages.error(request, value)
             return redirect(f"/shows/{show.id}")
         else:
-            new_title = request.POST["title"]
-            new_description = request.POST["description"]
-            new_network = request.POST["network"]
-            new_release_date = request.POST["release_date"]
+            new_network_id = request.POST['networks']
+            new_network = Network.objects.get(id=new_network_id)
 
-            show.title = new_title
-            show.description = new_description
-            show.network = new_network
-            show.release_date = new_release_date
+            show.title = request.POST["title"]
+            show.description = request.POST["description"]
+            show.networks = new_network
+            show.release_date = request.POST["release_date"]
             show.save()
+            print(show.networks.id)
+            print(request.POST["networks"])
             messages.success(request, "Show updated successfully!!!")
 
             return redirect(f"/shows/{show.id}")
