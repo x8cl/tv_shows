@@ -29,8 +29,10 @@ def create_show(request):
             # si el diccionario de errores contiene algo, recorra cada par clave-valor y cree un mensaje flash
             for key, value in errors.items():
                 messages.error(request, value)
+            # imprimo en la consola para revisar los datos
+            #print(request.POST["release_date"])
+            #print(str(datetime.date.today()))
             # redirigir al usuario al formulario para corregir los errores
-            print(request.POST["release_date"])
             return redirect("/shows/new")
         else:
             title = request.POST["title"]

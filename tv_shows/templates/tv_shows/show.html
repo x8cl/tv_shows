@@ -13,7 +13,9 @@
     {% endif %}
     <div class="col-9">
         <h4><span class="fw-bold">Title: </span>{{ show.title }}</h4>
+        {% if show.description %}
         <p><span class="fw-bold">Description: </span>{{ show.description }}</p>
+        {% endif %}
         <p><span class="fw-bold">Network: </span>{{ show.networks }}</p>
         <p><span class="fw-bold">Release date: </span>{{ show.release_date|date:"F d, Y" }}</p>
     </div>

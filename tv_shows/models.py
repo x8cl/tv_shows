@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+import datetime
 
 # Create your models here.
 class ShowManager(models.Manager):
@@ -15,9 +16,12 @@ class ShowManager(models.Manager):
         #valido que el campo "release_date" exista
         if len(postData["release_date"]) < 1:
             errors["release_date"] = "Please enter release date"
-        #valido que el campo "description" tenga al menos 2 caracteres y saco los espacios con strip
-        if len(postData["description"].strip()) < 2:
-            errors["description"] = "Description must be at least 10 characters"
+        #valido que el campo "release_date" sea mayor a la fecha actual
+        if postData["release_date"] > str(datetime.date.today()):
+            errors["release_date"] = "Release date is in the future...."
+        #valido que el campo "description" tenga al menos 10 caracteres y saco los espacios con strip
+        if len(postData["description"].strip()) > 0 and len(postData["description"].strip()) < 10:
+            errors["description"] = "Description must be at least 10 characters (blank is OK)"
         #retorno errores
         return errors
         
@@ -35,7 +39,7 @@ class Network(models.Model):
     
 class Show(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=500, blank=True)
     release_date = models.DateField()
     networks = models.ForeignKey(Network, related_name="shows", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
