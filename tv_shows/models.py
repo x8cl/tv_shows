@@ -33,6 +33,7 @@ class Network(models.Model):
 
     class Meta:
         ordering = ("id",)
+        app_label = "tv_shows"
     
     def __str__(self):
         return self.name
@@ -48,6 +49,7 @@ class Show(models.Model):
 
     class Meta:
         ordering = ("id",)
+        app_label = "tv_shows"
 
     def __str__(self):
         return self.title
