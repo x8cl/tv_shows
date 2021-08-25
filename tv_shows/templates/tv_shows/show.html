@@ -31,28 +31,5 @@
     <a class="btn btn-danger btn-sm modal-borrar" data-bs-toggle="modal" data-bs-target="#delete_modal" href="{% url 'tv_shows:delete_show' show.id %}" data-href="{% url 'tv_shows:delete_show' show.id %}" role="button">Delete</a>
     <a class="btn btn-success btn-sm" href="{% url 'tv_shows:home' %}" role="button">Go back</a>
 </div>
-<div class="modal fade" id="delete_modal" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Show</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <h6 class="modal-text">Are you sure you want to delete the this show?</h6>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                <a href="#" id="confirmar-borrar" class="btn btn-primary">Si</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $('.modal-borrar').on('click', function() {
-        const href= $(this).attr('data-href');
-        $('#confirmar-borrar').attr('href', href);
-    });
-</script>
+{% include "tv_shows/modals.html" %}
 {% endblock %}
